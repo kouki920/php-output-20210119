@@ -3,10 +3,12 @@ declare(strict_types=1);
 //ini_set('display_errors',1);
 namespace App;
 
+
 require_once __DIR__ . '/db/dbconnect.php';
 
+
 class CreateColumns{
-    public function insertTableSql($dbh,array $memos){
+    private function insertTableSql($dbh,array $memos){
 
             $count = 0;
             $columns = '';
@@ -25,10 +27,10 @@ class CreateColumns{
             $stmt->execute($memos);
     }
 
-    public function validation(array $memos){
+    private function validation(array $memos){
         $errors = [];
 
-        if(empty($memos['memo'])){
+        if(!strlen($memos['memo'])){
             $errors['memo'] = '今日のタスクを書いてください';
         }elseif(strlen($memos['memo']) > 255) {
             $errors['memo'] = '255文字以内で入力して下さい';
@@ -36,7 +38,23 @@ class CreateColumns{
 
         return $errors;
     }
-}
+
+    public function startInsertIntoSql(array $memos){
+        $create = new CreateColumns;
+        $errors = $create->validation($memos);
+
+        if(!count($errors)){
+
+        $dbh = dbConnect();
+
+        $create = new CreateColumns;
+        $create->insertTableSql($dbh,$memos);
+        header('Location:../app/IndexColumns.php');
+
+        }
+        }
+    }
+
 
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $memos = [];
@@ -45,23 +63,11 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         'memo' => $_POST['memo']
     ];
     // return $memos;
+    $start = new CreateColumns;
+$start->startInsertIntoSql($memos);
 }
 
-    $create = new CreateColumns;
-    $errors = $create->validation($memos);
 
-    if(!count($errors)){
-
-
-    $dbh = dbConnect();
-
-    $create = new CreateColumns;
-    $create->insertTableSql($dbh,$memos);
-    header('Location:../app/IndexColumns.php');
-
-    }else {
-        header('Location:../app/new.php');
-    }
 
 
 $title = '登録ページ';
