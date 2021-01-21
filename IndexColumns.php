@@ -8,13 +8,14 @@ use PDO;
 
 
 require_once __DIR__ . '/db/Dbconnect.php';
+// require_once __DIR__ . '/view/Xss.php';
 
 class IndexColumns{
     public function selectTableSql($dbh): array{
 
         try {
 
-            $selectSql = 'SELECT memo, created_at FROM todolist';
+            $selectSql = 'SELECT id, memo, created_at FROM todolist';
             $stmt = $dbh->prepare($selectSql);
             $stmt->execute();
 
