@@ -8,13 +8,15 @@ require_once __DIR__ . '/db/dbconnect.php';
 
 
 class CreateColumns{
-    private function insertTableSql($dbh,array $memos){
+    private function insertTableSql($dbh,array $memos)
+    {
 
             $count = 0;
             $columns = '';
             $values = '';
 
-            foreach(array_keys($memos) as $memo){
+            foreach(array_keys($memos) as $memo)
+            {
                 if($count++>0){
                     $columns .= ',';
                     $values .= ',';
@@ -27,7 +29,8 @@ class CreateColumns{
             $stmt->execute($memos);
     }
 
-    private function validation(array $memos){
+    private function validation(array $memos)
+    {
         $errors = [];
 
         if(!strlen($memos['memo'])){
@@ -43,7 +46,8 @@ class CreateColumns{
         $create = new CreateColumns;
         $errors = $create->validation($memos);
 
-        if(!count($errors)){
+        if(!count($errors))
+        {
 
         $dbh = dbConnect();
 
@@ -56,7 +60,8 @@ class CreateColumns{
     }
 
 
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
+if($_SERVER['REQUEST_METHOD'] === 'POST')
+{
     $memos = [];
 
     $memos = [
